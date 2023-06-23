@@ -5,7 +5,7 @@ GUI for image classification and object detection
 
 ## Models
 
-The YOLO weights can be found [here[(https://pjreddie.com/media/files/yolov3.weights). Download this file and place in the "./models/Yolo" folder
+The YOLO weights can be found [here](https://pjreddie.com/media/files/yolov3.weights). Download this file and place in the "./models/Yolo" folder
 
 ## Project Organization
 
