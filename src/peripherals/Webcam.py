@@ -3,7 +3,7 @@ import cv2
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QApplication, QDialog, QTabWidget, QVBoxLayout, QWidget, QPushButton, QLabel, QTextEdit
-from Models.YOLO_model import YoloModel
+from src.models.YOLO_model import YoloModel
 
 class CameraTab(QWidget):
     def __init__(self):

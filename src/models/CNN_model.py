@@ -7,9 +7,8 @@ from alive_progress import alive_bar
 import os
 import sys
 
-sys.path.append(os.path.join(os.getcwd(), 'App'))
-from Utils.load_data import Load_CIFAR10_Data
-from Utils.signal_utils import CustomDataset, PickleDump, PickleLoad
+from src.data.load_data import Load_CIFAR10_Data
+from src.utils.signal_utils import CustomDataset, PickleDump, PickleLoad
 
 
 class MyCNN(nn.Module):

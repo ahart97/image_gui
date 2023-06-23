@@ -1,14 +1,13 @@
 # YOLO object detection
 import cv2 as cv
 import numpy as np
-import time
 import os
 
 class YoloModel():
     def __init__(self, confidence = 0.5):
         # Load names of classes and get random colors
 
-        self.model_dir = os.path.join(os.getcwd(), 'App', 'Models', 'YoloModelData')
+        self.model_dir = os.path.join(os.getcwd(), 'models', 'Yolo')
 
         self.classes = open(os.path.join(self.model_dir, 'coco.names')).read().strip().split('\n')
         np.random.seed(42)

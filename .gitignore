@@ -93,3 +93,4 @@ data/external/cifar-10/data_batch_4
 data/external/cifar-10/data_batch_5
 data/external/cifar-10/Readme.md
 data/external/cifar-10/test_batch
+models/Yolo/yolov3.weights
