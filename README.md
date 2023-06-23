@@ -7,6 +7,8 @@ Example of the GUI can be seen below:
 
 ![plot](./data/processed/example.png)
 
+The image classification is still in progress
+
 ## Models
 
 The YOLO weights can be found [here](https://pjreddie.com/media/files/yolov3.weights). Download this file and place in the "./models/Yolo" folder
