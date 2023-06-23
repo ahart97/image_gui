@@ -1,7 +1,11 @@
 ImageGUI
 ==============================
 
-GUI for image classification and object detection
+This repository contains a PyQT GUI that utilizes a Convolutional Neural Network (CNN) trained on the CIFAR-10 dataset, as well as the You Only Look Once (YOLO) architecture to complete image and object detection/classification. The code is implemented using PyTorch, PyQT5, OpenCV, Python 3, and NumPy.
+
+Example of the GUI can be seen below:
+
+![plot](./App/images/example.png)
 
 ## Models
 
