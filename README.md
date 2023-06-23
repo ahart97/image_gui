@@ -11,6 +11,19 @@ Example of the GUI can be seen below:
 
 The YOLO weights can be found [here](https://pjreddie.com/media/files/yolov3.weights). Download this file and place in the "./models/Yolo" folder
 
+## Setup
+
+To start using the GUI follow the steps below:
+
+- Download the yolo weights from the link above
+- Install the python requirements in requirements.txt
+- Plug in a webcam
+- Run the following in the python environment
+
+```
+python main.py
+```
+
 ## Project Organization
 
 
