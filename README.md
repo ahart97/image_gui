@@ -5,7 +5,7 @@ This repository contains a PyQT GUI that utilizes a Convolutional Neural Network
 
 Example of the GUI can be seen below:
 
-![plot](./App/images/example.png)
+![plot](./data/processed/example.png)
 
 ## Models
 
