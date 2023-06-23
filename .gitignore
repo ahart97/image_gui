@@ -75,8 +75,6 @@ target/
 # Jupyter NB Checkpoints
 .ipynb_checkpoints/
 
-# exclude data from source control by default
-/data/
 
 # Mac OS-specific storage files
 .DS_Store
@@ -87,3 +85,11 @@ target/
 
 # Mypy cache
 .mypy_cache/
+*.meta
+data/external/cifar-10/data_batch_1
+data/external/cifar-10/data_batch_2
+data/external/cifar-10/data_batch_3
+data/external/cifar-10/data_batch_4
+data/external/cifar-10/data_batch_5
+data/external/cifar-10/Readme.md
+data/external/cifar-10/test_batch
