@@ -3,12 +3,14 @@ from torch import tensor
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
+from torchvision import transforms
 from alive_progress import alive_bar
 import os
 import sys
+from joblib import dump, load
+import cv2
 
-from src.data.load_data import Load_CIFAR10_Data
-from src.utils.signal_utils import CustomDataset, PickleDump, PickleLoad
+from src.utils.signal_utils import CustomDataset
 
 
 class MyCNN(nn.Module):
@@ -33,14 +35,15 @@ class MyCNN(nn.Module):
         self.classes = classes
         
     def forward(self, x):
+        x = torch.swapaxes(x, 1, 3)
+        x = torch.swapaxes(x, 2, 3)
         # Pass input through convolutional and pooling layers
         x = self.pool(F.relu(self.conv1(x)))
         x = self.pool(F.relu(self.conv2(x)))
         x = self.pool(F.relu(self.conv3(x)))
         
         # Flatten the output from the convolutional layers
-        x = x.view(-1, 128 * 4 * 4)
-        
+        x = torch.flatten(x, start_dim=1)        
         # Pass through the linear layer
         x = F.relu(self.fc1(x))
         x = self.fc2(x)
@@ -49,23 +52,26 @@ class MyCNN(nn.Module):
 
 
 class ImageClassifier:
-    def __init__(self, model: MyCNN) -> None:
-        self.model = model
+    def __init__(self, save_dir:str, 
+                 classes:list=['airplane','automobile','bird','cat','deer','dog','frog','horse','ship','truck'],
+                 image_size=32) -> None:
+        self.model = MyCNN(classes=classes)
         self.observed_image = ''
+        self.model_dir = os.path.join(save_dir, 'CNN')
+        self.image_size = image_size
 
-    def trainCNN(self, X, y):
+    def trainCNN(self, X, y, num_epochs=50,
+                 batch_size=512, lr=0.01):
         """
         Runs through the training and passes back a trained model
         """
 
         #Set loss function, optimizer, and number of epochs
-        lr = 0.01
         loss_fn = nn.CrossEntropyLoss()
         optimizer = torch.optim.Adam(self.model.parameters(), lr=lr)
-        num_epochs = 50
 
         dataset = CustomDataset(X, y)
-        dataloader = DataLoader(dataset, shuffle=True, batch_size = 1000, num_workers=2)
+        dataloader = DataLoader(dataset, shuffle=True, batch_size = batch_size, num_workers=2)
 
         print('Training model...')
         with alive_bar(num_epochs, force_tty=True) as bar:
@@ -85,41 +91,27 @@ class ImageClassifier:
                     #Update coefficients based on the back prop
                     optimizer.step()
                 bar()
+        
+        dump(self.model, os.path.join(self.model_dir, 'cls_model.joblib'), compress=3)
 
-    def SaveModel(self, save_path):
-        """
-        Saves the CNN
-        """
-        PickleDump(self.model, os.path.join(save_path, 'CNN_model.pickle'))
 
-    def LoadModel(self, load_path):
+    def loadModel(self):
         """
         Loads the CNN
         """
-        self.model = PickleLoad(os.path.join(load_path, 'CNN_model.pickle'))
+        self.model = load(os.path.join(self.model_dir, 'cls_model.joblib'))
 
     def classify_img(self, img):
         """
         img: n_width x n_height x n_channels
         """
-        X = tensor(img, dtype=torch.float32)
-        self.observed_image = self.classes[torch.argmax(self.forward(X)).detach().cpu().numpy()]
+        res_img = cv2.resize(img, dsize=(self.image_size, self.image_size))
+        X = torch.tensor(res_img, dtype=torch.float)
+        X = torch.unsqueeze(X, 0)
+        prediction = self.model(X)
+        class_idx = torch.argmax(self.model(X)).detach().cpu().numpy()
+        return self.model.classes[class_idx]
         
-
-
-if __name__ == '__main__':
-    """
-    Test the CNN model traing and structure
-    """
-
-    X, y, X_test, y_test, classes = Load_CIFAR10_Data(os.path.join(os.getcwd(), 'App', 'data', 'cifar-10'))
-
-    trialCNN = MyCNN(classes)
-    imgClassifier = ImageClassifier(trialCNN)
-
-    imgClassifier.trainCNN(X, y)
-    imgClassifier.SaveModel(os.path.join(os.getcwd(), 'App', 'Models', 'CNNModelData'))
-
 
     
 
