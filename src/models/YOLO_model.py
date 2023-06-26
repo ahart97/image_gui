@@ -4,10 +4,10 @@ import numpy as np
 import os
 
 class YoloModel():
-    def __init__(self, confidence = 0.5):
+    def __init__(self, save_dir, confidence = 0.5):
         # Load names of classes and get random colors
 
-        self.model_dir = os.path.join(os.getcwd(), 'models', 'Yolo')
+        self.model_dir = os.path.join(save_dir, 'Yolo')
 
         self.classes = open(os.path.join(self.model_dir, 'coco.names')).read().strip().split('\n')
         np.random.seed(42)
@@ -81,12 +81,3 @@ class YoloModel():
 
         #Only take the unqie class instances
         self.observed_classes = np.unique(self.observed_classes)
-
-
-if __name__ == '__main__':
-    Model = YoloModel(confidence = 0.6)
-
-    cv.namedWindow('window')
-    Model.load_image(cv.imread('images/horse.jpg'))
-
-    cv.destroyAllWindows()
