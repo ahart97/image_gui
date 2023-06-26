@@ -4,13 +4,16 @@ from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QApplication, QDialog, QTabWidget, QVBoxLayout, QWidget, QPushButton, QLabel, QTextEdit
 from src.models.YOLO_model import YoloModel
+from src.models.CNN_model import ImageClassifier
 
 class CameraTab(QWidget):
-    def __init__(self):
+    def __init__(self, model_dir):
         super().__init__()
 
         #Create YOLO model
-        self.object_model = YoloModel()
+        self.object_model = YoloModel(save_dir=model_dir)
+        self.image_model = ImageClassifier(save_dir=model_dir)
+        self.image_model.loadModel()
 
         # Create the video feed label
         self.video_feed_label = QLabel()
@@ -49,7 +52,8 @@ class CameraTab(QWidget):
 
     def image_pipeline(self):
         # Add your processing pipeline here
-        pass
+        self.image = self.image_model.classify_img(self.rgb_image)
+        self.image_label.setText('Image: {}'.format(self.image))
 
     def object_pipeline(self):
         self.object_model.classify_objects(self.rgb_image)
